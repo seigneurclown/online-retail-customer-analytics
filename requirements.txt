@@ -1,0 +1,29 @@
+# ===== Online Retail Data Analysis =====
+# Cài đặt: pip install -r requirements.txt
+
+# --- Xử lý dữ liệu ---
+pandas>=2.0
+numpy>=1.24
+openpyxl>=3.1          # đọc file .xlsx
+
+# --- Trực quan hóa ---
+matplotlib>=3.7
+seaborn>=0.12
+
+# --- Thống kê & Machine Learning ---
+scipy>=1.10
+scikit-learn>=1.3
+
+# --- Notebook & Báo cáo ---
+jupyter>=1.0
+markdown>=3.4           # Biên dịch báo cáo Markdown sang HTML/PDF
+openpyxl>=3.1           # Đọc và xuất báo cáo Excel đa trang (.xlsx)
+
+# --- Ứng dụng Web (FastAPI) ---
+fastapi>=0.100         # Build API nhanh chóng, hiện đại
+uvicorn>=0.20           # ASGI server để chạy ứng dụng
+pydantic>=2.0          # Validation dữ liệu tự động với Python type hints
+pydantic-settings>=2.0 # Quản lý cấu hình (settings) ứng dụng
+pymongo>=4.5          # MongoDB driver cho Python
+motor>=3.3             # Async MongoDB driver cho FastAPI
+mongomock>=4.1         # In-memory MongoDB mock cho testing

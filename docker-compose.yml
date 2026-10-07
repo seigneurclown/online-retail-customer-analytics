@@ -1,0 +1,74 @@
+# ================================================================
+# Docker Compose Orchestration: MongoDB (NoSQL) + FastAPI Backend
+# Học phần: DATA ANALYSIS FOR BUSINESS ENVIRONMENT (71DAEE10012)
+# Đề tài: Phân tích dữ liệu doanh thu và Phân cụm hành vi khách hàng trong lĩnh vực bán lẻ
+# ================================================================
+
+services:
+  # 1. Cơ sở dữ liệu NoSQL MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: online_retail_mongodb
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - retail_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # 2. Dịch vụ FastAPI Backend REST API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: online_retail_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DATABASE=online_retail
+      - MONGODB_TEST_DATABASE=online_retail_test
+      - APP_ENV=production
+      - DEBUG=False
+      - HOST=0.0.0.0
+      - PORT=8000
+      - BACKEND_CORS_ORIGINS=["http://localhost:5173","http://127.0.0.1:5173","http://localhost:3000","http://127.0.0.1:3000"]
+    volumes:
+      - ./data:/app/data:ro
+      - ./outputs:/app/outputs:ro
+    networks:
+      - retail_network
+
+  # 3. Dịch vụ React Frontend Dashboard
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: online_retail_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - retail_network
+
+networks:
+  retail_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

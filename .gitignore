@@ -1,0 +1,19 @@
+# Dữ liệu gốc (file lớn, không đưa lên Git)
+data/raw/
+# Cache Python và Jupyter
+__pycache__/
+.ipynb_checkpoints/
+# Môi trường ảo và cấu hình nhạy cảm
+venv/
+.venv/
+.env
+**/.env
+.agent/
+.pytest_cache/
+
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+frontend/node_modules/
+frontend/dist/

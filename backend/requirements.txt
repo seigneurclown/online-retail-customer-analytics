@@ -1,0 +1,21 @@
+# ===== Online Retail Analytics Backend Requirements =====
+
+# --- Web Framework & ASGI Server ---
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# --- Database (MongoDB NoSQL) ---
+pymongo>=4.6.0
+motor>=3.3.0
+dnspython>=2.6.0
+mongomock>=4.1.0
+
+# --- Data Processing (Dùng cho Seed Script) ---
+pandas>=2.0.0
+
+# --- Testing ---
+pytest>=8.0.0
+httpx>=0.27.0
