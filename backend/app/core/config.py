@@ -4,6 +4,7 @@ Cấu hình ứng dụng tập trung (Application Settings) sử dụng Pydantic
 Học phần: DATA ANALYSIS FOR BUSINESS ENVIRONMENT (71DAEE10012)
 """
 
+import json
 from typing import List, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -31,7 +32,7 @@ class Settings(BaseSettings):
     MONGODB_TEST_DATABASE: str = "online_retail_test"
 
     # --- Cấu hình CORS (Cho phép React Frontend kết nối) ---
-    BACKEND_CORS_ORIGINS: List[str] = [
+    BACKEND_CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",
@@ -42,8 +43,14 @@ class Settings(BaseSettings):
     @classmethod
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
         """Chuẩn hóa danh sách origins từ chuỗi JSON hoặc chuỗi ngăn cách bằng dấu phẩy."""
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",") if i.strip()]
+        if isinstance(v, str):
+            s = v.strip()
+            if s.startswith("[") and s.endswith("]"):
+                try:
+                    return json.loads(s)
+                except Exception:
+                    pass
+            return [i.strip() for i in s.split(",") if i.strip()]
         return v
 
     model_config = SettingsConfigDict(
