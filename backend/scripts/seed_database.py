@@ -37,10 +37,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger("seed_database")
 
-# Đường dẫn dữ liệu từ gốc dự án
-PROJECT_ROOT = BACKEND_DIR.parent
-DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
-OUTPUTS_TABLES = PROJECT_ROOT / "outputs" / "tables"
+# Đường dẫn dữ liệu từ gốc dự án hoặc cục bộ trong backend
+if (BACKEND_DIR / "data" / "processed").exists():
+    DATA_PROCESSED = BACKEND_DIR / "data" / "processed"
+    OUTPUTS_TABLES = BACKEND_DIR / "outputs" / "tables"
+else:
+    PROJECT_ROOT = BACKEND_DIR.parent
+    DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
+    OUTPUTS_TABLES = PROJECT_ROOT / "outputs" / "tables"
 
 
 def check_file_exists(file_path: Path) -> bool:

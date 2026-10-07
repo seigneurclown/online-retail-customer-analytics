@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Activity, Menu } from 'lucide-react';
+import { Activity, Menu, Sparkles } from 'lucide-react';
+import { DataManagementModal } from '../common/DataManagementModal';
 
 const titleMap: Record<string, { title: string; subtitle: string }> = {
   '/dashboard': {
@@ -33,6 +34,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const location = useLocation();
   const [backendHealthy, setBackendHealthy] = useState<boolean | null>(null);
+  const [isDataModalOpen, setIsDataModalOpen] = useState(false);
 
   useEffect(() => {
     const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
@@ -84,33 +86,53 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         </div>
       </div>
 
-      {/* Backend API Status Indicator */}
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-xs">
-        <Activity className="w-3.5 h-3.5 text-slate-500" />
-        <span className="text-slate-600 font-medium hidden md:inline">Backend API:</span>
-        <span className="flex items-center gap-1.5">
-          <span
-            className={`w-2 h-2 rounded-full ${
-              backendHealthy === null
-                ? 'bg-amber-400 animate-pulse'
-                : backendHealthy
-                ? 'bg-emerald-500'
-                : 'bg-rose-500'
-            }`}
-          />
-          <span
-            className={`font-semibold ${
-              backendHealthy === null
-                ? 'text-amber-700'
-                : backendHealthy
-                ? 'text-emerald-700'
-                : 'text-rose-700'
-            }`}
-          >
-            {backendHealthy === null ? 'Checking...' : backendHealthy ? 'Online' : 'Offline'}
+      {/* Right Actions: Seed Button & API Status Indicator */}
+      <div className="flex items-center gap-2.5">
+        <button
+          type="button"
+          onClick={() => setIsDataModalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 hover:text-indigo-800 border border-indigo-200/90 rounded-full text-xs font-semibold transition cursor-pointer shadow-2xs hover:shadow-xs"
+          title="Quản lý và Nạp dữ liệu vào Database"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
+          <span className="hidden sm:inline">⚡ Nạp dữ liệu</span>
+          <span className="sm:hidden">Dữ liệu</span>
+        </button>
+
+        {/* Backend API Status Indicator */}
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-xs">
+          <Activity className="w-3.5 h-3.5 text-slate-500" />
+          <span className="text-slate-600 font-medium hidden md:inline">Backend API:</span>
+          <span className="flex items-center gap-1.5">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                backendHealthy === null
+                  ? 'bg-amber-400 animate-pulse'
+                  : backendHealthy
+                  ? 'bg-emerald-500'
+                  : 'bg-rose-500'
+              }`}
+            />
+            <span
+              className={`font-semibold ${
+                backendHealthy === null
+                  ? 'text-amber-700'
+                  : backendHealthy
+                  ? 'text-emerald-700'
+                  : 'text-rose-700'
+              }`}
+            >
+              {backendHealthy === null ? 'Checking...' : backendHealthy ? 'Online' : 'Offline'}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
+
+      <DataManagementModal
+        isOpen={isDataModalOpen}
+        onClose={() => setIsDataModalOpen(false)}
+        onDataChanged={() => window.location.reload()}
+      />
     </header>
   );
 };

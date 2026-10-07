@@ -1,0 +1,3 @@
+Câu hỏi nghiên cứu,Kiểm định sử dụng,Lý do chọn test,Thống kê kiểm định,p-value,Mức ý nghĩa,Kết luận
+Giá trị đơn hàng giữa Weekday và Weekend có khác nhau không?,Mann-Whitney U Test,"Dữ liệu lệch phải mạnh, vi phạm giả định chuẩn của T-test","U = 21,088,569.0",2.473e-09,alpha = 0.05,Bác bỏ H0. Giá trị đơn hàng Weekday cao hơn Weekend
+Quốc gia có liên quan đến việc hủy đơn hay không?,Chi-Square Test of Independence,So sánh mối liên hệ giữa 2 biến định tính (Categorical),Chi2 = 38.36 (df=4),9.465e-08,alpha = 0.05,Bác bỏ H0. Đức có tỷ lệ hủy đơn cao vượt trội (24.2%)

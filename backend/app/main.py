@@ -21,6 +21,7 @@ from app.api.sales import router as sales_router
 from app.api.customers import router as customers_router
 from app.api.segmentation import router as segmentation_router
 from app.api.statistics import router as statistics_router
+from app.api.system import router as system_router
 
 # Thiết lập logging
 logging.basicConfig(
@@ -136,6 +137,7 @@ app.include_router(sales_router, prefix=f"{settings.API_V1_PREFIX}/sales", tags=
 app.include_router(customers_router, prefix=f"{settings.API_V1_PREFIX}/customers", tags=["Customers"])
 app.include_router(segmentation_router, prefix=f"{settings.API_V1_PREFIX}/segmentation", tags=["Segmentation"])
 app.include_router(statistics_router, prefix=f"{settings.API_V1_PREFIX}/statistics", tags=["Statistics"])
+app.include_router(system_router, prefix=f"{settings.API_V1_PREFIX}/system", tags=["System"])
 
 
 @app.get(

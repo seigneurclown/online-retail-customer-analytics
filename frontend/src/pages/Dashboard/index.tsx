@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   PoundSterling,
   ShoppingBag,
@@ -6,10 +6,11 @@ import {
   CreditCard,
   RotateCw,
   TrendingUp,
+  Sparkles,
 } from 'lucide-react';
 import { useDashboard } from '../../hooks/useDashboard';
 import { MetricCard, ChartCard } from '../../components/cards';
-import { PageHeader, LoadingState, ErrorState } from '../../components/common';
+import { PageHeader, LoadingState, ErrorState, DataManagementModal } from '../../components/common';
 import {
   RevenueTrendChart,
   TopCountriesChart,
@@ -22,6 +23,7 @@ import { formatNumber } from '../../utils/formatNumber';
 export const DashboardPage: React.FC = () => {
   const { summary, revenueTrend, topProducts, topCountries, segments, loading, error, refetch } =
     useDashboard();
+  const [isSeedModalOpen, setIsSeedModalOpen] = React.useState(false);
 
   if (error) {
     return (
@@ -30,14 +32,24 @@ export const DashboardPage: React.FC = () => {
           title="Executive Dashboard"
           subtitle="Real-time key performance indicators and revenue analysis"
           action={
-            <button
-              onClick={refetch}
-              type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition cursor-pointer"
-            >
-              <RotateCw className="w-3.5 h-3.5" />
-              <span>Retry</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsSeedModalOpen(true)}
+                type="button"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Nạp dữ liệu vào Database</span>
+              </button>
+              <button
+                onClick={refetch}
+                type="button"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-xs transition cursor-pointer"
+              >
+                <RotateCw className="w-3.5 h-3.5" />
+                <span>Thử lại</span>
+              </button>
+            </div>
           }
         />
         <ErrorState
@@ -45,6 +57,11 @@ export const DashboardPage: React.FC = () => {
           message={error}
           onRetry={refetch}
           className="mt-8"
+        />
+        <DataManagementModal
+          isOpen={isSeedModalOpen}
+          onClose={() => setIsSeedModalOpen(false)}
+          onDataChanged={refetch}
         />
       </div>
     );
@@ -57,16 +74,30 @@ export const DashboardPage: React.FC = () => {
         title="Executive Dashboard"
         subtitle="Real-time key performance indicators, sales dynamics, and customer segmentation"
         action={
-          <button
-            onClick={refetch}
-            disabled={loading}
-            type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-2xs transition cursor-pointer disabled:opacity-50"
-          >
-            <RotateCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-indigo-600' : ''}`} />
-            <span>Refresh</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsSeedModalOpen(true)}
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-semibold shadow-2xs transition cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Nạp / Quản lý Dữ liệu</span>
+            </button>
+            <button
+              onClick={refetch}
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-2xs transition cursor-pointer"
+            >
+              <RotateCw className="w-3.5 h-3.5" />
+              <span>Làm mới</span>
+            </button>
+          </div>
         }
+      />
+      <DataManagementModal
+        isOpen={isSeedModalOpen}
+        onClose={() => setIsSeedModalOpen(false)}
+        onDataChanged={refetch}
       />
 
       {/* Row 1: KPI Cards */}
